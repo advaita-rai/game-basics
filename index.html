@@ -16,20 +16,24 @@
             user-select: none;
         }
 
-        html, body {
+        html {
             width: 100%;
             height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
         }
 
         body {
+            width: 100%;
+            height: 100dvh;
             font-family: Arial, sans-serif;
             background: #1a1a2e;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
         #gameContainer {
@@ -45,6 +49,7 @@
             display: block;
             background: #0f3460;
             width: 100%;
+            min-height: 0;
             image-rendering: pixelated;
         }
 
@@ -56,7 +61,9 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
-            max-height: 30vh;
+            max-height: 25vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         #title {
@@ -102,9 +109,17 @@
 
         @media (max-width: 480px) {
             #title { font-size: 12px; }
-            #storyText { font-size: 11px; }
+            #storyText { 
+                font-size: 11px;
+                -webkit-line-clamp: 2;
+            }
             .choiceButton { font-size: 9px; padding: 6px 4px; }
             #choicesContainer { grid-template-columns: 1fr; }
+            #textBox {
+                max-height: 20vh;
+                padding: 6px;
+                gap: 2px;
+            }
         }
     </style>
 </head>
@@ -176,11 +191,17 @@
 
         function resizeCanvas() {
             const textBox = document.getElementById('textBox');
+            const container = document.getElementById('gameContainer');
+            
+            // Get actual computed dimensions
+            const containerHeight = container.clientHeight;
             const textBoxHeight = textBox.offsetHeight;
-            const containerHeight = window.innerHeight;
+            const canvasHeight = containerHeight - textBoxHeight;
             
             canvas.width = window.innerWidth;
-            canvas.height = containerHeight - textBoxHeight;
+            canvas.height = Math.max(canvasHeight, 100);
+            
+            drawScene(currentScene);
         }
 
         function initAudio() {
@@ -330,10 +351,26 @@
             resizeCanvas();
             drawScene('intro');
 
+            // Handle viewport changes on mobile
             window.addEventListener('resize', () => {
                 resizeCanvas();
                 drawScene(currentScene);
             });
+
+            // Handle orientation change
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    resizeCanvas();
+                    drawScene(currentScene);
+                }, 100);
+            });
+
+            // Force layout recalculation when visual viewport changes
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', () => {
+                    resizeCanvas();
+                });
+            }
 
             document.addEventListener('touchstart', initAudio, { once: true });
             document.addEventListener('click', initAudio, { once: true });
