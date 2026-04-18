@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Own Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background-color: #16213e;
+        }
+
+        #canvas {
+            flex: 1;
+            display: block;
+            background-color: #0f3460;
+        }
+
+        #textBox {
+            height: 160px;
+            background-color: #10121b;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-top: 2px solid #2f4d8f;
+            overflow-y: auto;
+        }
+
+        #title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f5f6ff;
+            margin-bottom: 4px;
+        }
+
+        #storyText {
+            font-size: 14px;
+            color: #e8ebff;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #choicesContainer {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .choiceButton {
+            padding: 12px 16px;
+            background-color: #2f4d8f;
+            color: #ffffff;
+            border: 2px solid #1f3d6f;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .choiceButton:hover {
+            background-color: #2f6fbf;
+            border-color: #4f9dff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(47, 109, 191, 0.4);
+        }
+
+        .choiceButton:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            #textBox {
+                height: 200px;
+            }
+
+            #title {
+                font-size: 16px;
+            }
+
+            #storyText {
+                font-size: 13px;
+            }
+
+            .choiceButton {
+                font-size: 11px;
+                min-width: 150px;
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="canvas" width="960" height="460"></canvas>
+        <div id="textBox">
+            <div id="title"></div>
+            <div id="storyText"></div>
+            <div id="choicesContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const titleEl = document.getElementById('title');
+        const storyEl = document.getElementById('storyText');
+        const choicesEl = document.getElementById('choicesContainer');
+
+        const SCENES = {
+            intro: {
+                title: 'Mystic Forest',
+                text: 'You wake up in a misty forest with glowing mushrooms. A path stretches into the distance, while shadows rustle in the trees.',
+                background: 'forest',
+                character: 'hero',
+                sound: 'bgm',
+                choices: [
+                    { text: 'Follow the glowing path', target: 'castle' },
+                    { text: 'Hide and wait', target: 'cave' }
+                ]
+            },
+            castle: {
+                title: 'Castle Gate',
+                text: 'A friendly wizard greets you at the castle gate and offers to guide you. You feel a warm energy around you.',
+                background: 'castle',
+                character: 'wizard',
+                sound: 'bgm',
+                choices: [
+                    { text: 'Accept the wizard\'s help', target: 'peace' },
+                    { text: 'Explore the tower alone', target: 'danger' }
+                ]
+            },
+            cave: {
+                title: 'Hidden Cave',
+                text: 'You crouch behind a mossy tree and discover a cave entrance. A creature stirs inside, and the air grows cold.',
+                background: 'cave',
+                character: 'goblin',
+                sound: 'bgm',
+                choices: [
+                    { text: 'Sneak inside', target: 'danger' },
+                    { text: 'Run back to the path', target: 'castle' }
+                ]
+            },
+            peace: {
+                title: 'A New Beginning',
+                text: 'With the wizard\'s guidance, you step into a bright future. The adventure has only just begun.',
+                background: 'castle',
+                character: 'hero',
+                sound: 'click',
+                choices: [
+                    { text: 'Play again', target: 'intro' }
+                ]
+            },
+            danger: {
+                title: 'Danger Awaits',
+                text: 'A shadow leaps from the darkness. You have entered a challenge that will test your courage.',
+                background: 'cave',
+                character: 'goblin',
+                sound: 'click',
+                choices: [
+                    { text: 'Try again', target: 'intro' }
+                ]
+            }
+        };
+
+        // Drawing functions for backgrounds
+        function drawForest() {
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            // Sky gradient
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, '#70abd8');
+            grad.addColorStop(1, '#3e5a6b');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Ground
+            ctx.fillStyle = '#3e5a2d';
+            ctx.fillRect(0, h * 0.75, w, h * 0.25);
+
+            // Trees
+            ctx.fillStyle = '#5c3a18';
+            ctx.fillRect(30, h * 0.45, 80, h * 0.55);
+            ctx.fillStyle = '#2a7037';
+            ctx.beginPath();
+            ctx.arc(70, h * 0.45, 50, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#5c3a18';
+            ctx.fillRect(540, h * 0.4, 80, h * 0.6);
+            ctx.fillStyle = '#2a7037';
+            ctx.beginPath();
+            ctx.arc(580, h * 0.4, 55, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Sun/moon glow
+            ctx.fillStyle = 'rgba(255, 241, 171, 0.3)';
+            ctx.beginPath();
+            ctx.arc(400, h * 0.2, 80, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawCave() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Sky
+            ctx.fillStyle = '#363a49';
+            ctx.fillRect(0, 0, w, h * 0.7);
+
+            // Ground
+            ctx.fillStyle = '#2e2826';
+            ctx.fillRect(0, h * 0.7, w, h * 0.3);
+
+            // Cave entrance
+            ctx.fillStyle = '#16161b';
+            ctx.beginPath();
+            ctx.ellipse(w / 2, h * 0.55, 140, 100, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#0a0a0d';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Cave opening details
+            ctx.fillStyle = '#0c0c0e';
+            ctx.beginPath();
+            ctx.ellipse(w / 2, h * 0.55, 80, 60, 0, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawCastle() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Sky
+            ctx.fillStyle = '#8ec6ff';
+            ctx.fillRect(0, 0, w, h * 0.85);
+
+            // Ground
+            ctx.fillStyle = '#625f4e';
+            ctx.fillRect(0, h * 0.85, w, h * 0.15);
+
+            // Castle body
+            ctx.fillStyle = '#cdcddee';
+            ctx.fillRect(520, h * 0.45, 120, h * 0.4);
+
+            // Castle roof
+            ctx.fillStyle = '#5c3a18';
+            ctx.beginPath();
+            ctx.moveTo(520, h * 0.45);
+            ctx.lineTo(580, h * 0.2);
+            ctx.lineTo(640, h * 0.45);
+            ctx.closePath();
+            ctx.fill();
+
+            // Tower
+            ctx.fillStyle = '#babadb';
+            ctx.fillRect(670, h * 0.4, 90, h * 0.45);
+
+            // Tower roof
+            ctx.fillStyle = '#5c3a18';
+            ctx.beginPath();
+            ctx.moveTo(670, h * 0.4);
+            ctx.lineTo(715, h * 0.15);
+            ctx.lineTo(760, h * 0.4);
+            ctx.closePath();
+            ctx.fill();
+
+            // Door
+            ctx.fillStyle = '#5c1e32';
+            ctx.fillRect(580, h * 0.6, 40, h * 0.25);
+        }
+
+        // Drawing functions for characters
+        function drawHero(x, y) {
+            ctx.fillStyle = '#f3cb9c';
+            ctx.beginPath();
+            ctx.arc(x + 40, y + 40, 22, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#375dc4';
+            ctx.fillRect(x + 20, y + 65, 40, 40);
+
+            ctx.fillStyle = '#1f2a3d';
+            ctx.fillRect(x + 25, y + 110, 30, 60);
+        }
+
+        function drawWizard(x, y) {
+            // Hat
+            ctx.fillStyle = '#2c1861';
+            ctx.beginPath();
+            ctx.moveTo(x + 20, y + 60);
+            ctx.lineTo(x + 40, y + 10);
+            ctx.lineTo(x + 60, y + 60);
+            ctx.closePath();
+            ctx.fill();
+
+            // Head
+            ctx.fillStyle = '#ffd7ba';
+            ctx.beginPath();
+            ctx.arc(x + 40, y + 65, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Robes
+            ctx.fillStyle = '#5b83de';
+            ctx.fillRect(x + 15, y + 85, 50, 50);
+
+            // Staff
+            ctx.strokeStyle = '#5c7a2f';
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.moveTo(x + 70, y + 85);
+            ctx.lineTo(x + 70, y + 150);
+            ctx.stroke();
+        }
+
+        function drawGoblin(x, y) {
+            ctx.fillStyle = '#92c045';
+            // Head
+            ctx.beginPath();
+            ctx.arc(x + 40, y + 40, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ears
+            ctx.fillStyle = '#92c045';
+            ctx.beginPath();
+            ctx.arc(x + 20, y + 25, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 60, y + 25, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Body
+            ctx.fillStyle = '#587c2d';
+            ctx.fillRect(x + 20, y + 60, 40, 50);
+
+            // Legs
+            ctx.fillStyle = '#1a1a1c';
+            ctx.fillRect(x + 25, y + 115, 12, 40);
+            ctx.fillRect(x + 43, y + 115, 12, 40);
+        }
+
+        // Audio context for procedural sounds
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playNote(frequency, duration, volume = 0.3) {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.value = frequency;
+            osc.type = 'sine';
+            
+            gain.gain.setValueAtTime(volume, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + duration);
+        }
+
+        function playSound(soundType) {
+            if (soundType === 'bgm') {
+                playNote(220, 0.5, 0.1);
+                setTimeout(() => playNote(262, 0.5, 0.1), 150);
+                setTimeout(() => playNote(330, 0.5, 0.1), 300);
+                setTimeout(() => playNote(392, 0.5, 0.1), 450);
+            } else if (soundType === 'click') {
+                playNote(440, 0.1, 0.15);
+                setTimeout(() => playNote(660, 0.1, 0.15), 50);
+            }
+        }
+
+        function drawScene(sceneKey) {
+            const scene = SCENES[sceneKey];
+
+            // Draw background
+            if (scene.background === 'forest') drawForest();
+            else if (scene.background === 'cave') drawCave();
+            else if (scene.background === 'castle') drawCastle();
+
+            // Draw character
+            if (scene.character === 'hero') drawHero(canvas.width - 220, canvas.height - 280);
+            else if (scene.character === 'wizard') drawWizard(canvas.width - 220, canvas.height - 280);
+            else if (scene.character === 'goblin') drawGoblin(canvas.width - 220, canvas.height - 280);
+
+            // Update text
+            titleEl.textContent = scene.title;
+            storyEl.textContent = scene.text;
+
+            // Update choices
+            choicesEl.innerHTML = '';
+            scene.choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'choiceButton';
+                btn.textContent = choice.text;
+                btn.onclick = () => {
+                    playSound('click');
+                    goToScene(choice.target);
+                };
+                choicesEl.appendChild(btn);
+            });
+
+            // Play sound
+            if (scene.sound) {
+                playSound(scene.sound);
+            }
+        }
+
+        function goToScene(sceneKey) {
+            drawScene(sceneKey);
+        }
+
+        // Initialize game
+        drawScene('intro');
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = Math.max(460, window.innerHeight - 160);
+            drawScene(Object.keys(SCENES).find(key => SCENES[key].title === titleEl.textContent) || 'intro');
+        });
+    </script>
+</body>
+</html>
