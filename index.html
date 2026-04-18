@@ -29,17 +29,21 @@
             flex: 1;
             display: block;
             background-color: #0f3460;
+            width: 100%;
+            height: auto;
+            image-rendering: crisp-edges;
         }
 
         #textBox {
-            height: 160px;
             background-color: #10121b;
-            padding: 16px;
+            padding: 12px 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             border-top: 2px solid #2f4d8f;
             overflow-y: auto;
+            max-height: 25vh;
+            min-height: 120px;
         }
 
         #title {
@@ -90,9 +94,19 @@
             transform: translateY(0);
         }
 
+        @media (max-width: 1024px) {
+            .choiceButton {
+                font-size: 11px;
+                min-width: 150px;
+                padding: 10px 12px;
+            }
+        }
+
         @media (max-width: 768px) {
             #textBox {
-                height: 200px;
+                max-height: 30vh;
+                min-height: 140px;
+                padding: 10px 12px;
             }
 
             #title {
@@ -105,15 +119,40 @@
 
             .choiceButton {
                 font-size: 11px;
-                min-width: 150px;
-                padding: 10px 12px;
+                min-width: 120px;
+                padding: 8px 10px;
+                flex: 1 1 calc(50% - 6px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #textBox {
+                max-height: 35vh;
+                min-height: 120px;
+            }
+
+            #title {
+                font-size: 14px;
+                margin-bottom: 2px;
+            }
+
+            #storyText {
+                font-size: 12px;
+                margin-bottom: 6px;
+            }
+
+            .choiceButton {
+                font-size: 10px;
+                min-width: 100%;
+                padding: 10px 8px;
+                flex: 1 1 100%;
             }
         }
     </style>
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="canvas" width="960" height="460"></canvas>
+        <canvas id="canvas"></canvas>
         <div id="textBox">
             <div id="title"></div>
             <div id="storyText"></div>
@@ -127,6 +166,8 @@
         const titleEl = document.getElementById('title');
         const storyEl = document.getElementById('storyText');
         const choicesEl = document.getElementById('choicesContainer');
+
+        let currentScene = 'intro';
 
         const SCENES = {
             intro: {
@@ -184,6 +225,13 @@
             }
         };
 
+        function resizeCanvas() {
+            const textBoxHeight = document.getElementById('textBox').offsetHeight;
+            const availableHeight = window.innerHeight - textBoxHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = Math.max(300, availableHeight);
+        }
+
         // Drawing functions for backgrounds
         function drawForest() {
             const w = canvas.width;
@@ -200,31 +248,34 @@
             ctx.fillStyle = '#3e5a2d';
             ctx.fillRect(0, h * 0.75, w, h * 0.25);
 
-            // Trees
+            // Trees (scaled)
+            const treeScale = Math.max(0.5, w / 1000);
+            
             ctx.fillStyle = '#5c3a18';
-            ctx.fillRect(30, h * 0.45, 80, h * 0.55);
+            ctx.fillRect(30 * treeScale, h * 0.45, 80 * treeScale, h * 0.55);
             ctx.fillStyle = '#2a7037';
             ctx.beginPath();
-            ctx.arc(70, h * 0.45, 50, 0, Math.PI * 2);
+            ctx.arc(70 * treeScale, h * 0.45, 50 * treeScale, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.fillStyle = '#5c3a18';
-            ctx.fillRect(540, h * 0.4, 80, h * 0.6);
+            ctx.fillRect(540 * treeScale, h * 0.4, 80 * treeScale, h * 0.6);
             ctx.fillStyle = '#2a7037';
             ctx.beginPath();
-            ctx.arc(580, h * 0.4, 55, 0, Math.PI * 2);
+            ctx.arc(580 * treeScale, h * 0.4, 55 * treeScale, 0, Math.PI * 2);
             ctx.fill();
 
             // Sun/moon glow
             ctx.fillStyle = 'rgba(255, 241, 171, 0.3)';
             ctx.beginPath();
-            ctx.arc(400, h * 0.2, 80, 0, Math.PI * 2);
+            ctx.arc(400 * treeScale, h * 0.2, 80 * treeScale, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCave() {
             const w = canvas.width;
             const h = canvas.height;
+            const scale = Math.max(0.5, w / 1000);
 
             // Sky
             ctx.fillStyle = '#363a49';
@@ -237,23 +288,24 @@
             // Cave entrance
             ctx.fillStyle = '#16161b';
             ctx.beginPath();
-            ctx.ellipse(w / 2, h * 0.55, 140, 100, 0, 0, Math.PI * 2);
+            ctx.ellipse(w / 2, h * 0.55, 140 * scale, 100 * scale, 0, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.strokeStyle = '#0a0a0d';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 3 * scale;
             ctx.stroke();
 
             // Cave opening details
             ctx.fillStyle = '#0c0c0e';
             ctx.beginPath();
-            ctx.ellipse(w / 2, h * 0.55, 80, 60, 0, 0, Math.PI * 2);
+            ctx.ellipse(w / 2, h * 0.55, 80 * scale, 60 * scale, 0, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCastle() {
             const w = canvas.width;
             const h = canvas.height;
+            const scale = Math.max(0.5, w / 1000);
 
             // Sky
             ctx.fillStyle = '#8ec6ff';
@@ -265,102 +317,105 @@
 
             // Castle body
             ctx.fillStyle = '#cdcddee';
-            ctx.fillRect(520, h * 0.45, 120, h * 0.4);
+            ctx.fillRect(520 * scale, h * 0.45, 120 * scale, h * 0.4);
 
             // Castle roof
             ctx.fillStyle = '#5c3a18';
             ctx.beginPath();
-            ctx.moveTo(520, h * 0.45);
-            ctx.lineTo(580, h * 0.2);
-            ctx.lineTo(640, h * 0.45);
+            ctx.moveTo(520 * scale, h * 0.45);
+            ctx.lineTo(580 * scale, h * 0.2);
+            ctx.lineTo(640 * scale, h * 0.45);
             ctx.closePath();
             ctx.fill();
 
             // Tower
             ctx.fillStyle = '#babadb';
-            ctx.fillRect(670, h * 0.4, 90, h * 0.45);
+            ctx.fillRect(670 * scale, h * 0.4, 90 * scale, h * 0.45);
 
             // Tower roof
             ctx.fillStyle = '#5c3a18';
             ctx.beginPath();
-            ctx.moveTo(670, h * 0.4);
-            ctx.lineTo(715, h * 0.15);
-            ctx.lineTo(760, h * 0.4);
+            ctx.moveTo(670 * scale, h * 0.4);
+            ctx.lineTo(715 * scale, h * 0.15);
+            ctx.lineTo(760 * scale, h * 0.4);
             ctx.closePath();
             ctx.fill();
 
             // Door
             ctx.fillStyle = '#5c1e32';
-            ctx.fillRect(580, h * 0.6, 40, h * 0.25);
+            ctx.fillRect(580 * scale, h * 0.6, 40 * scale, h * 0.25);
         }
 
         // Drawing functions for characters
         function drawHero(x, y) {
+            const scale = canvas.width / 960;
             ctx.fillStyle = '#f3cb9c';
             ctx.beginPath();
-            ctx.arc(x + 40, y + 40, 22, 0, Math.PI * 2);
+            ctx.arc(x + 40 * scale, y + 40 * scale, 22 * scale, 0, Math.PI * 2);
             ctx.fill();
 
             ctx.fillStyle = '#375dc4';
-            ctx.fillRect(x + 20, y + 65, 40, 40);
+            ctx.fillRect(x + 20 * scale, y + 65 * scale, 40 * scale, 40 * scale);
 
             ctx.fillStyle = '#1f2a3d';
-            ctx.fillRect(x + 25, y + 110, 30, 60);
+            ctx.fillRect(x + 25 * scale, y + 110 * scale, 30 * scale, 60 * scale);
         }
 
         function drawWizard(x, y) {
+            const scale = canvas.width / 960;
             // Hat
             ctx.fillStyle = '#2c1861';
             ctx.beginPath();
-            ctx.moveTo(x + 20, y + 60);
-            ctx.lineTo(x + 40, y + 10);
-            ctx.lineTo(x + 60, y + 60);
+            ctx.moveTo(x + 20 * scale, y + 60 * scale);
+            ctx.lineTo(x + 40 * scale, y + 10 * scale);
+            ctx.lineTo(x + 60 * scale, y + 60 * scale);
             ctx.closePath();
             ctx.fill();
 
             // Head
             ctx.fillStyle = '#ffd7ba';
             ctx.beginPath();
-            ctx.arc(x + 40, y + 65, 20, 0, Math.PI * 2);
+            ctx.arc(x + 40 * scale, y + 65 * scale, 20 * scale, 0, Math.PI * 2);
             ctx.fill();
 
             // Robes
             ctx.fillStyle = '#5b83de';
-            ctx.fillRect(x + 15, y + 85, 50, 50);
+            ctx.fillRect(x + 15 * scale, y + 85 * scale, 50 * scale, 50 * scale);
 
             // Staff
             ctx.strokeStyle = '#5c7a2f';
-            ctx.lineWidth = 8;
+            ctx.lineWidth = 8 * scale;
             ctx.beginPath();
-            ctx.moveTo(x + 70, y + 85);
-            ctx.lineTo(x + 70, y + 150);
+            ctx.moveTo(x + 70 * scale, y + 85 * scale);
+            ctx.lineTo(x + 70 * scale, y + 150 * scale);
             ctx.stroke();
         }
 
         function drawGoblin(x, y) {
+            const scale = canvas.width / 960;
             ctx.fillStyle = '#92c045';
             // Head
             ctx.beginPath();
-            ctx.arc(x + 40, y + 40, 20, 0, Math.PI * 2);
+            ctx.arc(x + 40 * scale, y + 40 * scale, 20 * scale, 0, Math.PI * 2);
             ctx.fill();
 
             // Ears
             ctx.fillStyle = '#92c045';
             ctx.beginPath();
-            ctx.arc(x + 20, y + 25, 8, 0, Math.PI * 2);
+            ctx.arc(x + 20 * scale, y + 25 * scale, 8 * scale, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(x + 60, y + 25, 8, 0, Math.PI * 2);
+            ctx.arc(x + 60 * scale, y + 25 * scale, 8 * scale, 0, Math.PI * 2);
             ctx.fill();
 
             // Body
             ctx.fillStyle = '#587c2d';
-            ctx.fillRect(x + 20, y + 60, 40, 50);
+            ctx.fillRect(x + 20 * scale, y + 60 * scale, 40 * scale, 50 * scale);
 
             // Legs
             ctx.fillStyle = '#1a1a1c';
-            ctx.fillRect(x + 25, y + 115, 12, 40);
-            ctx.fillRect(x + 43, y + 115, 12, 40);
+            ctx.fillRect(x + 25 * scale, y + 115 * scale, 12 * scale, 40 * scale);
+            ctx.fillRect(x + 43 * scale, y + 115 * scale, 12 * scale, 40 * scale);
         }
 
         // Audio context for procedural sounds
@@ -403,10 +458,12 @@
             else if (scene.background === 'cave') drawCave();
             else if (scene.background === 'castle') drawCastle();
 
-            // Draw character
-            if (scene.character === 'hero') drawHero(canvas.width - 220, canvas.height - 280);
-            else if (scene.character === 'wizard') drawWizard(canvas.width - 220, canvas.height - 280);
-            else if (scene.character === 'goblin') drawGoblin(canvas.width - 220, canvas.height - 280);
+            // Draw character (positioned on the right side)
+            const charX = canvas.width - 220;
+            const charY = canvas.height - 280;
+            if (scene.character === 'hero') drawHero(charX, charY);
+            else if (scene.character === 'wizard') drawWizard(charX, charY);
+            else if (scene.character === 'goblin') drawGoblin(charX, charY);
 
             // Update text
             titleEl.textContent = scene.title;
@@ -432,17 +489,18 @@
         }
 
         function goToScene(sceneKey) {
+            currentScene = sceneKey;
             drawScene(sceneKey);
         }
 
         // Initialize game
+        resizeCanvas();
         drawScene('intro');
 
         // Handle window resize
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = Math.max(460, window.innerHeight - 160);
-            drawScene(Object.keys(SCENES).find(key => SCENES[key].title === titleEl.textContent) || 'intro');
+            resizeCanvas();
+            drawScene(currentScene);
         });
     </script>
 </body>
