@@ -145,51 +145,351 @@
 
         const SCENES = {
             intro: {
-                title: 'Mystic Forest',
-                text: 'You wake up in a misty forest with glowing mushrooms. A path stretches into the distance, while shadows rustle in the trees.',
+                title: 'Awakening',
+                text: 'You wake up in a misty forest with glowing mushrooms surrounding you. Your memory is foggy, but you sense you\'re in great danger. A path stretches left toward a castle, while a cave entrance yawns to your right.',
                 background: 'forest',
                 character: 'hero',
                 choices: [
-                    { text: 'Follow the glowing path', target: 'castle' },
-                    { text: 'Hide and wait', target: 'cave' }
+                    { text: 'Follow the glowing path to the castle', target: 'castle_approach' },
+                    { text: 'Investigate the mysterious cave', target: 'cave_entrance' },
+                    { text: 'Examine your surroundings carefully', target: 'examine_forest' }
                 ]
             },
-            castle: {
+            examine_forest: {
+                title: 'Forest Investigation',
+                text: 'You find an old, worn map hidden among the roots of an ancient tree. It shows a hidden treasure chamber beneath the castle. You also notice fresh goblin tracks leading away from the cave.',
+                background: 'forest',
+                character: 'hero',
+                choices: [
+                    { text: 'Head to the castle with new knowledge', target: 'castle_approach' },
+                    { text: 'Follow the goblin tracks', target: 'goblin_encounter' },
+                    { text: 'Return to the path cautiously', target: 'castle_approach' }
+                ]
+            },
+            castle_approach: {
                 title: 'Castle Gate',
-                text: 'A friendly wizard greets you at the castle gate and offers to guide you. You feel a warm energy around you.',
+                text: 'You approach an imposing stone castle. A wise wizard stands at the gate, studying you intently. His eyes glow with ancient magic. "I\'ve been expecting you," he says calmly. "The darkness is spreading."',
                 background: 'castle',
                 character: 'wizard',
                 choices: [
-                    { text: 'Accept the wizard\'s help', target: 'peace' },
-                    { text: 'Explore the tower alone', target: 'danger' }
+                    { text: 'Ask the wizard for help', target: 'wizard_dialogue' },
+                    { text: 'Demand answers about your past', target: 'wizard_challenge' },
+                    { text: 'Slip past him into the castle', target: 'castle_interior' }
                 ]
             },
-            cave: {
-                title: 'Hidden Cave',
-                text: 'You crouch behind a mossy tree and discover a cave entrance. A creature stirs inside, and the air grows cold.',
+            wizard_dialogue: {
+                title: 'Ancient Magic',
+                text: 'The wizard explains: "A shadow curse has fallen over this land. There\'s a crystalline artifact hidden in the castle vault that can dispel it. But beware—the goblin king guards it fiercely. You\'ll need a weapon or a spell."',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Ask for a magical staff', target: 'receive_staff' },
+                    { text: 'Ask for a legendary sword', target: 'receive_sword' },
+                    { text: 'Reject help and enter alone', target: 'castle_interior' }
+                ]
+            },
+            wizard_challenge: {
+                title: 'Magical Duel',
+                text: 'The wizard\'s eyes flash with anger. "You dare question me?" Arcane energy crackles around him. He raises his staff, ready to test your worthiness in magical combat. Do you fight back or submit?',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Face the magical duel', target: 'duel_result' },
+                    { text: 'Dodge and flee into the castle', target: 'castle_interior' },
+                    { text: 'Raise your hands in surrender', target: 'wizard_mercy' }
+                ]
+            },
+            wizard_mercy: {
+                title: 'A Test of Character',
+                text: 'The wizard lowers his staff. "Good. You choose wisdom over pride. Perhaps you are worthy after all." He grants you both a staff AND a sword—rare artifacts. "Now go. The vault awaits."',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Enter the castle with both weapons', target: 'castle_interior_armed' }
+                ]
+            },
+            receive_staff: {
+                title: 'Magical Staff Granted',
+                text: 'The wizard hands you a shimmering staff crackling with ethereal energy. "This staff channels the ancient magic of the forest. It will aid you in your quest. Now enter, and claim the artifact."',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Enter the castle with the staff', target: 'castle_interior_armed' }
+                ]
+            },
+            receive_sword: {
+                title: 'Legendary Sword',
+                text: 'The wizard draws a magnificent blade forged from starlight. "This is Starfall, the sword of heroes. Many have wielded it. Perhaps your destiny is to be the next. Go now—the goblin king awaits."',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Enter the castle with the sword', target: 'castle_interior_armed' }
+                ]
+            },
+            duel_result: {
+                title: 'Magical Battle',
+                text: 'Magic clashes against magic. After a fierce exchange, you manage to deflect the wizard\'s final spell. He smiles. "Excellent! You have the spirit of a true hero. I shall aid you." He gives you both weapons and blessings.',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Enter the castle with wizard\'s blessing', target: 'castle_interior_armed' }
+                ]
+            },
+            cave_entrance: {
+                title: 'Cave Mouth',
+                text: 'The cave entrance looms before you, dark and foreboding. You hear strange echoing sounds from within—growls mixed with the clink of metal. This is clearly the goblin king\'s lair.',
                 background: 'cave',
                 character: 'goblin',
                 choices: [
-                    { text: 'Sneak inside', target: 'danger' },
-                    { text: 'Run back to the path', target: 'castle' }
+                    { text: 'Enter the cave to confront the goblin king', target: 'goblin_battle' },
+                    { text: 'Search for another entrance', target: 'cave_secret_path' },
+                    { text: 'Return to the forest to seek aid first', target: 'intro' }
                 ]
             },
-            peace: {
-                title: 'A New Beginning',
-                text: 'With the wizard\'s guidance, you step into a bright future. The adventure has only just begun.',
+            goblin_encounter: {
+                title: 'Goblin Scout',
+                text: 'You encounter a goblin scout on patrol. He looks startled to see you. Before he can sound an alarm, you have mere seconds to decide: fight, sneak past him, or negotiate.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Attack the scout', target: 'defeat_scout' },
+                    { text: 'Attempt to sneak past silently', target: 'sneak_past' },
+                    { text: 'Try to speak with the scout', target: 'goblin_negotiation' }
+                ]
+            },
+            defeat_scout: {
+                title: 'Victory',
+                text: 'You swiftly defeat the goblin scout. He drops an ancient key before fleeing. The key bears the mark of the castle vault. You\'ve gained a crucial advantage!',
+                background: 'cave',
+                character: 'hero',
+                choices: [
+                    { text: 'Continue to the castle with the key', target: 'castle_approach' },
+                    { text: 'Explore the goblin lair further', target: 'goblin_battle' }
+                ]
+            },
+            sneak_past: {
+                title: 'Silent Success',
+                text: 'You move like shadow, avoiding the scout\'s gaze entirely. You\'ve discovered a secret passage leading directly into the castle vault! The goblin will never see you coming.',
+                background: 'cave',
+                character: 'hero',
+                choices: [
+                    { text: 'Use the secret passage to reach the vault', target: 'vault_victory' }
+                ]
+            },
+            goblin_negotiation: {
+                title: 'An Unexpected Alliance',
+                text: 'Surprisingly, the goblin listens! He explains that the goblin king has enslaved his people. "Help free us from his tyranny, and we will help you claim the artifact." A potential ally!',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Accept the goblin\'s offer of alliance', target: 'goblin_army' },
+                    { text: 'Promise to help but go alone first', target: 'castle_approach' }
+                ]
+            },
+            goblin_army: {
+                title: 'Freed Goblins',
+                text: 'The goblin leads you through hidden tunnels to the vault. Behind you march dozens of freed goblins. Together, you face the goblin king. He stands alone, surrounded, realizing his reign has ended.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Claim the artifact and end the curse', target: 'victory_with_army' },
+                    { text: 'Offer the goblin king redemption', target: 'redemption_path' }
+                ]
+            },
+            cave_secret_path: {
+                title: 'Hidden Cavern',
+                text: 'You discover an ancient underground river that leads to a secret chamber. Inside, you find a treasury of magical items and most importantly—a shortcut directly to the vault!',
+                background: 'cave',
+                character: 'hero',
+                choices: [
+                    { text: 'Collect items and head to the vault', target: 'vault_victory' },
+                    { text: 'Use the shortcut to bypass the king', target: 'vault_victory' }
+                ]
+            },
+            castle_interior: {
+                title: 'Castle Halls',
+                text: 'You enter the grand halls of the castle, unarmed and alone. Guards spot you immediately, but they seem... hesitant to attack. You can feel ancient magic protecting this place. You must reach the vault.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Run through the halls toward the vault', target: 'vault_challenge' },
+                    { text: 'Search for alternative routes', target: 'castle_secret' }
+                ]
+            },
+            castle_interior_armed: {
+                title: 'Castle Halls - Empowered',
+                text: 'With wizard-blessed weapons in hand, you stride confidently through the castle. The guards bow before the wizard\'s mark upon your brow. The path to the vault is clear.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Proceed directly to the vault', target: 'vault_victory' }
+                ]
+            },
+            castle_secret: {
+                title: 'Library Discovery',
+                text: 'You find the ancient library. A dusty tome reveals the vault\'s true location—deep underground, protected by puzzles and trials. You now know the true path forward.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Head underground to the vault', target: 'vault_puzzle' }
+                ]
+            },
+            vault_challenge: {
+                title: 'Guardian Clash',
+                text: 'The vault is protected by a magical guardian—an echo of an ancient knight. You must either defeat it in combat, solve the riddle it poses, or find another way.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Fight the guardian', target: 'guardian_battle' },
+                    { text: 'Solve the guardian\'s riddle', target: 'riddle_game' },
+                    { text: 'Search for a way around', target: 'vault_sneak' }
+                ]
+            },
+            vault_puzzle: {
+                title: 'Vault Puzzles',
+                text: 'The vault is filled with ancient puzzles and glowing runes. Your intuition guides you through each one. The path opens before you like a living thing recognizing a worthy hero.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Claim the artifact within', target: 'vault_victory' }
+                ]
+            },
+            vault_sneak: {
+                title: 'Secret Passage',
+                text: 'You find a collapsed section of wall that leads around the guardian. Beyond it lies the vault chamber, unguarded and waiting.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Enter the vault chamber', target: 'vault_victory' }
+                ]
+            },
+            vault_victory: {
+                title: 'Artifact Claimed',
+                text: 'You hold the crystalline artifact aloft. Its light fills the vault, and you feel the shadow curse beginning to lift. The land trembles as darkness recedes. You are the hero this world needed.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Return to the wizard', target: 'final_blessing' },
+                    { text: 'Use the artifact to reshape the land', target: 'hero_true_power' }
+                ]
+            },
+            guardian_battle: {
+                title: 'Echo Falls',
+                text: 'You defeat the magical guardian in an epic battle. As it fades, the vault door swings open, and you see the artifact glowing within.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Claim the artifact', target: 'vault_victory' }
+                ]
+            },
+            riddle_game: {
+                title: 'Riddle Solved',
+                text: '"What is sought but never owned, valued by all yet worthless to some?" The answer comes to you instantly: "Knowledge." The guardian bows and the vault opens.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Claim the artifact', target: 'vault_victory' }
+                ]
+            },
+            goblin_battle: {
+                title: 'Goblin King\'s Throne',
+                text: 'You face the goblin king in his cavernous throne room. He is enormous, scarred from countless battles, and furious that a human has invaded his domain. Battle is inevitable.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Fight the goblin king', target: 'final_battle' },
+                    { text: 'Challenge him to a contest of strength', target: 'contest' },
+                    { text: 'Try to reason with him', target: 'redemption_path' }
+                ]
+            },
+            contest: {
+                title: 'Contest of Strength',
+                text: 'You and the goblin king engage in an intense test of strength—arm wrestling, then combat without magic. Through skill and determination, you prove yourself. He respects power and concedes the artifact.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Take the artifact and leave with his respect', target: 'vault_victory' }
+                ]
+            },
+            final_battle: {
+                title: 'Victory in Battle',
+                text: 'The battle rages across the throne room. Magic clashes against brute strength. In the end, you emerge victorious, though battered and weary. The goblin king falls, and the artifact is yours.',
+                background: 'cave',
+                character: 'hero',
+                choices: [
+                    { text: 'Claim the artifact', target: 'vault_victory' }
+                ]
+            },
+            redemption_path: {
+                title: 'Redemption',
+                text: 'You look into the goblin king\'s eyes and see not evil, but pain and desperation. "We\'ve both been cursed," you say. "Let\'s break the cycle together." He slowly lowers his weapon.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Work with the goblin king to break the curse', target: 'peace_ending' }
+                ]
+            },
+            victory_with_army: {
+                title: 'Liberation',
+                text: 'With the freed goblins\' support, you claim the artifact and dismantle the tyranny. Both humans and goblins are freed from the curse. Two peoples, once enemies, begin to heal.',
+                background: 'cave',
+                character: 'hero',
+                choices: [
+                    { text: 'Continue your adventure', target: 'new_era' }
+                ]
+            },
+            final_blessing: {
+                title: 'Hero\'s Blessing',
+                text: 'The wizard bows before you. "You have done what few could do. The curse is broken. Legend will remember your name forever. A new age of peace has begun."',
+                background: 'castle',
+                character: 'wizard',
+                choices: [
+                    { text: 'Embrace your destiny as a legendary hero', target: 'hero_ending' }
+                ]
+            },
+            hero_true_power: {
+                title: 'Power Unleashed',
+                text: 'You channel the artifact\'s full power, reshaping the land itself. Mountains lower, valleys fill, forests bloom. You become one with the magic, transcending your mortal form.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Witness your true power', target: 'god_ending' }
+                ]
+            },
+            peace_ending: {
+                title: 'Unlikely Alliance',
+                text: 'Together, you and the goblin king break the curse through cooperation. Humans and goblins learn to coexist. You become the first ambassador between two worlds, honored by all.',
+                background: 'cave',
+                character: 'goblin',
+                choices: [
+                    { text: 'Play again', target: 'intro' }
+                ]
+            },
+            new_era: {
+                title: 'A New Age',
+                text: 'With the curse broken and both peoples united, a new era of prosperity begins. You are celebrated as the hero who brought peace. Your legend will echo through the ages.',
                 background: 'castle',
                 character: 'hero',
                 choices: [
                     { text: 'Play again', target: 'intro' }
                 ]
             },
-            danger: {
-                title: 'Danger Awaits',
-                text: 'A shadow leaps from the darkness. You have entered a challenge that will test your courage.',
-                background: 'cave',
-                character: 'goblin',
+            hero_ending: {
+                title: 'The Legend Lives On',
+                text: 'You become the legendary hero of prophecy. Ages will pass, and bards will sing of your deeds. You have saved not just a land, but an entire world.',
+                background: 'castle',
+                character: 'hero',
                 choices: [
-                    { text: 'Try again', target: 'intro' }
+                    { text: 'Play again', target: 'intro' }
+                ]
+            },
+            god_ending: {
+                title: 'Ascension',
+                text: 'You have transcended mortality itself. From your divine form, you watch over the land for eternity, a guardian spirit forever ensuring peace. You are no longer human—you are legend eternal.',
+                background: 'castle',
+                character: 'hero',
+                choices: [
+                    { text: 'Play again', target: 'intro' }
                 ]
             }
         };
