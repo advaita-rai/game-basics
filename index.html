@@ -25,9 +25,11 @@
             width: 100%;
             height: 100dvh;
             font-family: Arial, sans-serif;
-            background: #1a1a2e;
+            background: #0a0e1a;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
             margin: 0;
             padding: 0;
@@ -41,7 +43,10 @@
             flex-direction: column;
             width: 100%;
             height: 100%;
+            max-width: 900px;
+            max-height: 100dvh;
             background: #16213e;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
         #canvas {
@@ -50,7 +55,7 @@
             background: #0f3460;
             width: 100%;
             min-height: 0;
-            image-rendering: pixelated;
+            image-rendering: crisp-edges;
         }
 
         #textBox {
@@ -233,77 +238,304 @@
             const w = canvas.width;
             const h = canvas.height;
             const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#70abd8');
-            grad.addColorStop(1, '#3e5a6b');
+            grad.addColorStop(0, '#87ceeb');
+            grad.addColorStop(0.5, '#87ceeb');
+            grad.addColorStop(1, '#228b22');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = '#3e5a2d';
-            ctx.fillRect(0, h * 0.75, w, h * 0.25);
-            const s = w / 1200;
-            ctx.fillStyle = '#5c3a18';
-            ctx.fillRect(30 * s, h * 0.45, 80 * s, h * 0.55);
-            ctx.fillStyle = '#2a7037';
+            
+            // Grass
+            ctx.fillStyle = '#2d5016';
+            ctx.fillRect(0, h * 0.6, w, h * 0.4);
+            
+            // Trees
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(w * 0.1, h * 0.3, 40, h * 0.3);
+            ctx.fillStyle = '#228b22';
             ctx.beginPath();
-            ctx.arc(70 * s, h * 0.45, 50 * s, 0, Math.PI * 2);
+            ctx.arc(w * 0.1 + 20, h * 0.25, 60, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(w * 0.8, h * 0.35, 30, h * 0.25);
+            ctx.fillStyle = '#2d5016';
+            ctx.beginPath();
+            ctx.arc(w * 0.8 + 15, h * 0.28, 50, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Mushrooms
+            ctx.fillStyle = '#ff69b4';
+            ctx.beginPath();
+            ctx.arc(w * 0.3, h * 0.65, 15, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffff99';
+            ctx.beginPath();
+            ctx.arc(w * 0.3, h * 0.65, 10, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ffff99';
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.7, 8, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCave() {
             const w = canvas.width;
             const h = canvas.height;
-            ctx.fillStyle = '#363a49';
-            ctx.fillRect(0, 0, w, h * 0.7);
-            ctx.fillStyle = '#2e2826';
-            ctx.fillRect(0, h * 0.7, w, h * 0.3);
-            ctx.fillStyle = '#16161b';
+            ctx.fillStyle = '#4a4a54';
+            ctx.fillRect(0, 0, w, h);
+            
+            // Cave entrance
+            ctx.fillStyle = '#1a1a1f';
             ctx.beginPath();
-            ctx.ellipse(w / 2, h * 0.55, 140, 100, 0, 0, Math.PI * 2);
+            ctx.ellipse(w / 2, h * 0.35, 180, 140, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Stalactites
+            ctx.strokeStyle = '#2a2a30';
+            ctx.lineWidth = 8;
+            ctx.beginPath();
+            ctx.moveTo(w * 0.2, 0);
+            ctx.lineTo(w * 0.2 - 20, h * 0.2);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(w * 0.8, 0);
+            ctx.lineTo(w * 0.8 + 20, h * 0.15);
+            ctx.stroke();
+            
+            // Glow effect
+            ctx.fillStyle = '#6b5b95';
+            ctx.beginPath();
+            ctx.arc(w * 0.3, h * 0.5, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ff6b9d';
+            ctx.beginPath();
+            ctx.arc(w * 0.7, h * 0.45, 35, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCastle() {
             const w = canvas.width;
             const h = canvas.height;
-            ctx.fillStyle = '#8ec6ff';
-            ctx.fillRect(0, 0, w, h * 0.85);
-            ctx.fillStyle = '#625f4e';
-            ctx.fillRect(0, h * 0.85, w, h * 0.15);
-            ctx.fillStyle = '#cdcddee';
-            ctx.fillRect(w * 0.5, h * 0.4, 120, h * 0.4);
+            ctx.fillStyle = '#87ceeb';
+            ctx.fillRect(0, 0, w, h * 0.7);
+            ctx.fillStyle = '#8b7355';
+            ctx.fillRect(0, h * 0.7, w, h * 0.3);
+            
+            // Castle walls
+            ctx.fillStyle = '#a9a9a9';
+            ctx.fillRect(w * 0.25, h * 0.3, w * 0.5, h * 0.4);
+            
+            // Towers
+            ctx.fillStyle = '#808080';
+            ctx.fillRect(w * 0.15, h * 0.25, 60, h * 0.45);
+            ctx.fillRect(w * 0.75, h * 0.25, 60, h * 0.45);
+            
+            // Tower tops
+            ctx.fillStyle = '#696969';
+            ctx.beginPath();
+            ctx.moveTo(w * 0.15, h * 0.25);
+            ctx.lineTo(w * 0.15 + 30, h * 0.1);
+            ctx.lineTo(w * 0.15 + 60, h * 0.25);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(w * 0.75, h * 0.25);
+            ctx.lineTo(w * 0.75 + 30, h * 0.1);
+            ctx.lineTo(w * 0.75 + 60, h * 0.25);
+            ctx.fill();
+            
+            // Main entrance
+            ctx.fillStyle = '#2f2f2f';
+            ctx.fillRect(w * 0.45, h * 0.5, 60, h * 0.2);
+            
+            // Gate
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 3;
+            ctx.fillStyle = '#8b6914';
+            ctx.fillRect(w * 0.47, h * 0.52, 26, h * 0.16);
+            ctx.fillRect(w * 0.57, h * 0.52, 26, h * 0.16);
         }
 
         function drawHero(x, y) {
-            const s = 0.3;
-            ctx.fillStyle = '#f3cb9c';
+            const s = 1.5;
+            // Head
+            ctx.fillStyle = '#f5deb3';
             ctx.beginPath();
-            ctx.arc(x + 40 * s, y + 40 * s, 15, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y, 18 * s, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = '#375dc4';
-            ctx.fillRect(x + 20 * s, y + 60 * s, 30 * s, 40 * s);
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x + 12 * s, y - 6 * s, 4 * s, 4 * s);
+            ctx.fillRect(x + 22 * s, y - 6 * s, 4 * s, 4 * s);
+            
+            // Smile
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 2 * s, 6 * s, 0, Math.PI);
+            ctx.stroke();
+            
+            // Body - blue armor
+            ctx.fillStyle = '#4169e1';
+            ctx.fillRect(x + 8 * s, y + 15 * s, 24 * s, 30 * s);
+            
+            // Gold trim
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(x + 8 * s, y + 15 * s, 24 * s, 3 * s);
+            ctx.fillRect(x + 8 * s, y + 40 * s, 24 * s, 3 * s);
+            
+            // Arms
+            ctx.fillStyle = '#ff6347';
+            ctx.fillRect(x + 2 * s, y + 20 * s, 6 * s, 20 * s);
+            ctx.fillRect(x + 32 * s, y + 20 * s, 6 * s, 20 * s);
+            
+            // Legs
+            ctx.fillStyle = '#3d3d3d';
+            ctx.fillRect(x + 10 * s, y + 45 * s, 7 * s, 20 * s);
+            ctx.fillRect(x + 23 * s, y + 45 * s, 7 * s, 20 * s);
+            
+            // Boots
+            ctx.fillStyle = '#8b4513';
+            ctx.fillRect(x + 9 * s, y + 65 * s, 9 * s, 5 * s);
+            ctx.fillRect(x + 22 * s, y + 65 * s, 9 * s, 5 * s);
         }
 
         function drawWizard(x, y) {
-            const s = 0.3;
-            ctx.fillStyle = '#2c1861';
+            const s = 1.5;
+            // Pointed hat
+            ctx.fillStyle = '#4b0082';
             ctx.beginPath();
-            ctx.moveTo(x + 30, y);
-            ctx.lineTo(x + 50, y + 30);
-            ctx.lineTo(x + 10, y + 30);
+            ctx.moveTo(x + 20 * s, y - 15 * s);
+            ctx.lineTo(x + 10 * s, y + 5 * s);
+            ctx.lineTo(x + 30 * s, y + 5 * s);
             ctx.closePath();
             ctx.fill();
-            ctx.fillStyle = '#ffd7ba';
+            
+            // Hat brim
+            ctx.fillStyle = '#6a0dad';
             ctx.beginPath();
-            ctx.arc(x + 30, y + 40, 15, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y + 5 * s, 12 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Head
+            ctx.fillStyle = '#fdbcb4';
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 15 * s, 16 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eyes - mystical
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(x + 12 * s, y + 10 * s, 5 * s, 5 * s);
+            ctx.fillRect(x + 23 * s, y + 10 * s, 5 * s, 5 * s);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x + 13 * s, y + 11 * s, 2 * s, 2 * s);
+            ctx.fillRect(x + 24 * s, y + 11 * s, 2 * s, 2 * s);
+            
+            // Beard
+            ctx.fillStyle = '#d4a5a5';
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 30 * s, 8 * s, 0, Math.PI);
+            ctx.fill();
+            
+            // Robe
+            ctx.fillStyle = '#6a0dad';
+            ctx.fillRect(x + 6 * s, y + 30 * s, 28 * s, 35 * s);
+            
+            // Stars on robe
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x + 12 * s, y + 40 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 28 * s, y + 45 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Staff
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(x + 35 * s, y + 25 * s);
+            ctx.lineTo(x + 40 * s, y + 60 * s);
+            ctx.stroke();
+            
+            // Staff orb
+            ctx.fillStyle = '#ff69b4';
+            ctx.beginPath();
+            ctx.arc(x + 40 * s, y + 20 * s, 6 * s, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawGoblin(x, y) {
-            ctx.fillStyle = '#92c045';
+            const s = 1.5;
+            // Head - green
+            ctx.fillStyle = '#6b8e23';
             ctx.beginPath();
-            ctx.arc(x + 30, y + 35, 12, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y, 16 * s, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = '#587c2d';
-            ctx.fillRect(x + 20, y + 50, 30, 30);
+            
+            // Ears
+            ctx.fillStyle = '#556b2f';
+            ctx.beginPath();
+            ctx.arc(x + 8 * s, y - 12 * s, 7 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 32 * s, y - 12 * s, 7 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Crazy eyes
+            ctx.fillStyle = '#ffff00';
+            ctx.fillRect(x + 12 * s, y - 4 * s, 6 * s, 6 * s);
+            ctx.fillRect(x + 22 * s, y - 4 * s, 6 * s, 6 * s);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x + 13 * s, y - 3 * s, 3 * s, 3 * s);
+            ctx.fillRect(x + 24 * s, y - 2 * s, 3 * s, 3 * s);
+            
+            // Wicked grin
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 4 * s, 8 * s, 0, Math.PI);
+            ctx.stroke();
+            
+            // Teeth
+            ctx.fillStyle = '#fff';
+            for (let i = 0; i < 5; i++) {
+                ctx.fillRect(x + (14 + i * 2.4) * s, y + 4 * s, 1.5 * s, 2 * s);
+            }
+            
+            // Body
+            ctx.fillStyle = '#7cb342';
+            ctx.fillRect(x + 6 * s, y + 15 * s, 28 * s, 35 * s);
+            
+            // Claws on chest
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x + 15 * s, y + 25 * s);
+            ctx.lineTo(x + 10 * s, y + 32 * s);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x + 25 * s, y + 25 * s);
+            ctx.lineTo(x + 30 * s, y + 32 * s);
+            ctx.stroke();
+            
+            // Legs
+            ctx.fillStyle = '#558b2f';
+            ctx.fillRect(x + 9 * s, y + 50 * s, 7 * s, 18 * s);
+            ctx.fillRect(x + 24 * s, y + 50 * s, 7 * s, 18 * s);
+            
+            // Feet
+            ctx.fillStyle = '#3d5a1f';
+            ctx.beginPath();
+            ctx.arc(x + 12.5 * s, y + 68 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 27.5 * s, y + 68 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
         }
 
         function drawScene(sceneKey) {
@@ -313,8 +545,8 @@
             else if (scene.background === 'cave') drawCave();
             else if (scene.background === 'castle') drawCastle();
 
-            const charX = canvas.width - 150;
-            const charY = canvas.height - 200;
+            const charX = canvas.width - 140;
+            const charY = canvas.height - 180;
             if (scene.character === 'hero') drawHero(charX, charY);
             else if (scene.character === 'wizard') drawWizard(charX, charY);
             else if (scene.character === 'goblin') drawGoblin(charX, charY);
