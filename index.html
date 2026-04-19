@@ -537,305 +537,755 @@
         function drawForest() {
             const w = canvas.width;
             const h = canvas.height;
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#87ceeb');
-            grad.addColorStop(0.5, '#87ceeb');
-            grad.addColorStop(1, '#228b22');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
             
-            // Grass
-            ctx.fillStyle = '#2d5016';
+            // Sky gradient - improved
+            const grad = ctx.createLinearGradient(0, 0, 0, h * 0.7);
+            grad.addColorStop(0, '#6dd5ff');
+            grad.addColorStop(0.5, '#87ceeb');
+            grad.addColorStop(1, '#a8d8ea');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, w, h * 0.7);
+            
+            // Clouds
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.beginPath();
+            ctx.arc(w * 0.15, h * 0.15, 40, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(w * 0.2, h * 0.12, 50, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(w * 0.25, h * 0.15, 35, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(w * 0.75, h * 0.2, 45, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(w * 0.8, h * 0.18, 55, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(w * 0.85, h * 0.22, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Distant trees (background)
+            ctx.fillStyle = '#1a4d1a';
+            ctx.beginPath();
+            ctx.arc(w * 0.05, h * 0.4, 80, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(w * 0.95, h * 0.35, 90, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Grass with gradient
+            const grassGrad = ctx.createLinearGradient(0, h * 0.6, 0, h);
+            grassGrad.addColorStop(0, '#3d7d1f');
+            grassGrad.addColorStop(1, '#1a4d0a');
+            ctx.fillStyle = grassGrad;
             ctx.fillRect(0, h * 0.6, w, h * 0.4);
             
-            // Trees
+            // Grass texture
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * w;
+                const y = h * 0.6 + Math.random() * h * 0.4;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + Math.random() * 10, y - Math.random() * 20);
+                ctx.stroke();
+            }
+            
+            // Main trees
             ctx.fillStyle = '#654321';
-            ctx.fillRect(w * 0.1, h * 0.3, 40, h * 0.3);
-            ctx.fillStyle = '#228b22';
+            ctx.fillRect(w * 0.1, h * 0.3, 50, h * 0.3);
+            ctx.fillStyle = '#2d7d1f';
             ctx.beginPath();
-            ctx.arc(w * 0.1 + 20, h * 0.25, 60, 0, Math.PI * 2);
+            ctx.arc(w * 0.1 + 25, h * 0.2, 80, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#1a4d0a';
+            ctx.beginPath();
+            ctx.arc(w * 0.1 + 25, h * 0.25, 60, 0, Math.PI * 2);
             ctx.fill();
             
             ctx.fillStyle = '#654321';
-            ctx.fillRect(w * 0.8, h * 0.35, 30, h * 0.25);
-            ctx.fillStyle = '#2d5016';
+            ctx.fillRect(w * 0.8, h * 0.35, 45, h * 0.25);
+            ctx.fillStyle = '#2d7d1f';
             ctx.beginPath();
-            ctx.arc(w * 0.8 + 15, h * 0.28, 50, 0, Math.PI * 2);
+            ctx.arc(w * 0.8 + 22, h * 0.25, 75, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#1a4d0a';
+            ctx.beginPath();
+            ctx.arc(w * 0.8 + 22, h * 0.3, 55, 0, Math.PI * 2);
             ctx.fill();
             
-            // Mushrooms
+            // Mushrooms - glowing
             ctx.fillStyle = '#ff69b4';
             ctx.beginPath();
-            ctx.arc(w * 0.3, h * 0.65, 15, 0, Math.PI * 2);
+            ctx.arc(w * 0.3, h * 0.65, 18, 0, Math.PI * 2);
             ctx.fill();
             ctx.fillStyle = '#ffff99';
             ctx.beginPath();
-            ctx.arc(w * 0.3, h * 0.65, 10, 0, Math.PI * 2);
+            ctx.arc(w * 0.3, h * 0.65, 12, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(w * 0.3 - 2, h * 0.67, 4, 8);
+            
+            // Glowing glow
+            ctx.fillStyle = 'rgba(255, 255, 153, 0.3)';
+            ctx.beginPath();
+            ctx.arc(w * 0.3, h * 0.65, 40, 0, Math.PI * 2);
             ctx.fill();
             
+            // More mushrooms
             ctx.fillStyle = '#ffff99';
             ctx.beginPath();
-            ctx.arc(w * 0.5, h * 0.7, 8, 0, Math.PI * 2);
+            ctx.arc(w * 0.5, h * 0.72, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.74, 7, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#ff69b4';
+            ctx.beginPath();
+            ctx.arc(w * 0.65, h * 0.68, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffff99';
+            ctx.beginPath();
+            ctx.arc(w * 0.65, h * 0.68, 9, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCave() {
             const w = canvas.width;
             const h = canvas.height;
-            ctx.fillStyle = '#4a4a54';
+            
+            // Stone texture background
+            const caveGrad = ctx.createLinearGradient(0, 0, 0, h);
+            caveGrad.addColorStop(0, '#505060');
+            caveGrad.addColorStop(0.5, '#3a3a48');
+            caveGrad.addColorStop(1, '#2a2a32');
+            ctx.fillStyle = caveGrad;
             ctx.fillRect(0, 0, w, h);
             
-            // Cave entrance
-            ctx.fillStyle = '#1a1a1f';
+            // Cave ceiling
+            ctx.fillStyle = '#2a2a32';
             ctx.beginPath();
-            ctx.ellipse(w / 2, h * 0.35, 180, 140, 0, 0, Math.PI * 2);
+            ctx.moveTo(0, 0);
+            ctx.lineTo(w * 0.15, h * 0.1);
+            ctx.lineTo(w * 0.3, h * 0.08);
+            ctx.lineTo(w * 0.5, h * 0.12);
+            ctx.lineTo(w * 0.7, h * 0.1);
+            ctx.lineTo(w * 0.85, h * 0.08);
+            ctx.lineTo(w, 0);
+            ctx.lineTo(w, h);
+            ctx.lineTo(0, h);
+            ctx.closePath();
             ctx.fill();
             
             // Stalactites
-            ctx.strokeStyle = '#2a2a30';
-            ctx.lineWidth = 8;
-            ctx.beginPath();
-            ctx.moveTo(w * 0.2, 0);
-            ctx.lineTo(w * 0.2 - 20, h * 0.2);
-            ctx.stroke();
+            ctx.fillStyle = '#1a1a1f';
+            for (let i = 0; i < 8; i++) {
+                const x = (i + 1) * w / 9;
+                const length = 40 + Math.sin(i) * 20;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x - 15, length);
+                ctx.lineTo(x + 15, length);
+                ctx.closePath();
+                ctx.fill();
+            }
             
+            // Cave entrance - dark
+            ctx.fillStyle = '#0a0a0f';
             ctx.beginPath();
-            ctx.moveTo(w * 0.8, 0);
-            ctx.lineTo(w * 0.8 + 20, h * 0.15);
-            ctx.stroke();
-            
-            // Glow effect
-            ctx.fillStyle = '#6b5b95';
-            ctx.beginPath();
-            ctx.arc(w * 0.3, h * 0.5, 40, 0, Math.PI * 2);
+            ctx.ellipse(w / 2, h * 0.4, 200, 160, 0, 0, Math.PI * 2);
             ctx.fill();
             
+            // Stalagmites from bottom
+            ctx.fillStyle = '#1a1a1f';
+            for (let i = 0; i < 5; i++) {
+                const x = (i + 1) * w / 6;
+                const height = 60 + Math.sin(i * 2) * 30;
+                ctx.beginPath();
+                ctx.moveTo(x, h);
+                ctx.lineTo(x - 12, h - height);
+                ctx.lineTo(x + 12, h - height);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Glowing crystals - purple
+            ctx.fillStyle = '#6b5b95';
+            ctx.beginPath();
+            ctx.arc(w * 0.25, h * 0.45, 45, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#8b7ba8';
+            ctx.beginPath();
+            ctx.arc(w * 0.25, h * 0.42, 28, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Glow halo
+            ctx.fillStyle = 'rgba(107, 91, 149, 0.4)';
+            ctx.beginPath();
+            ctx.arc(w * 0.25, h * 0.45, 70, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Glowing crystals - pink
             ctx.fillStyle = '#ff6b9d';
             ctx.beginPath();
-            ctx.arc(w * 0.7, h * 0.45, 35, 0, Math.PI * 2);
+            ctx.arc(w * 0.75, h * 0.5, 50, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ff8fb3';
+            ctx.beginPath();
+            ctx.arc(w * 0.75, h * 0.47, 30, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Glow halo
+            ctx.fillStyle = 'rgba(255, 107, 157, 0.4)';
+            ctx.beginPath();
+            ctx.arc(w * 0.75, h * 0.5, 75, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Blue crystals
+            ctx.fillStyle = '#4169e1';
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.55, 35, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#6495ed';
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.53, 22, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawCastle() {
             const w = canvas.width;
             const h = canvas.height;
-            ctx.fillStyle = '#87ceeb';
+            
+            // Sky gradient
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.7);
+            skyGrad.addColorStop(0, '#87ceeb');
+            skyGrad.addColorStop(1, '#e0f6ff');
+            ctx.fillStyle = skyGrad;
             ctx.fillRect(0, 0, w, h * 0.7);
-            ctx.fillStyle = '#8b7355';
+            
+            // Ground gradient
+            const groundGrad = ctx.createLinearGradient(0, h * 0.7, 0, h);
+            groundGrad.addColorStop(0, '#a0826d');
+            groundGrad.addColorStop(1, '#8b7355');
+            ctx.fillStyle = groundGrad;
             ctx.fillRect(0, h * 0.7, w, h * 0.3);
             
-            // Castle walls
+            // Stone blocks on ground
+            ctx.strokeStyle = '#5d5d4d';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 10; i++) {
+                ctx.strokeRect(i * w / 10, h * 0.85, w / 10, h * 0.15);
+            }
+            
+            // Castle base shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            ctx.fillRect(w * 0.2, h * 0.65, w * 0.6, h * 0.05);
+            
+            // Left tower
             ctx.fillStyle = '#a9a9a9';
-            ctx.fillRect(w * 0.25, h * 0.3, w * 0.5, h * 0.4);
-            
-            // Towers
+            ctx.fillRect(w * 0.12, h * 0.22, 70, h * 0.48);
             ctx.fillStyle = '#808080';
-            ctx.fillRect(w * 0.15, h * 0.25, 60, h * 0.45);
-            ctx.fillRect(w * 0.75, h * 0.25, 60, h * 0.45);
-            
-            // Tower tops
-            ctx.fillStyle = '#696969';
             ctx.beginPath();
-            ctx.moveTo(w * 0.15, h * 0.25);
-            ctx.lineTo(w * 0.15 + 30, h * 0.1);
-            ctx.lineTo(w * 0.15 + 60, h * 0.25);
+            ctx.moveTo(w * 0.12, h * 0.22);
+            ctx.lineTo(w * 0.12 + 35, h * 0.05);
+            ctx.lineTo(w * 0.12 + 70, h * 0.22);
+            ctx.closePath();
             ctx.fill();
             
+            // Left tower windows
+            ctx.fillStyle = '#1a1a2e';
+            for (let i = 0; i < 3; i++) {
+                ctx.fillRect(w * 0.2, h * 0.3 + i * h * 0.12, 15, 15);
+                ctx.fillRect(w * 0.38, h * 0.3 + i * h * 0.12, 15, 15);
+            }
+            
+            // Right tower
+            ctx.fillStyle = '#a9a9a9';
+            ctx.fillRect(w * 0.76, h * 0.22, 70, h * 0.48);
+            ctx.fillStyle = '#808080';
             ctx.beginPath();
-            ctx.moveTo(w * 0.75, h * 0.25);
-            ctx.lineTo(w * 0.75 + 30, h * 0.1);
-            ctx.lineTo(w * 0.75 + 60, h * 0.25);
+            ctx.moveTo(w * 0.76, h * 0.22);
+            ctx.lineTo(w * 0.76 + 35, h * 0.05);
+            ctx.lineTo(w * 0.76 + 70, h * 0.22);
+            ctx.closePath();
             ctx.fill();
             
-            // Main entrance
+            // Right tower windows
+            ctx.fillStyle = '#1a1a2e';
+            for (let i = 0; i < 3; i++) {
+                ctx.fillRect(w * 0.8, h * 0.3 + i * h * 0.12, 15, 15);
+                ctx.fillRect(w * 0.98, h * 0.3 + i * h * 0.12, 15, 15);
+            }
+            
+            // Main castle walls
+            ctx.fillStyle = '#b0b0b0';
+            ctx.fillRect(w * 0.25, h * 0.3, w * 0.5, h * 0.4);
+            ctx.fillStyle = '#919191';
+            ctx.fillRect(w * 0.25, h * 0.3, w * 0.5, 5);
+            
+            // Main castle windows
+            ctx.fillStyle = '#1a1a2e';
+            for (let i = 0; i < 4; i++) {
+                ctx.fillRect(w * 0.3 + i * w * 0.12, h * 0.38, 18, 20);
+                ctx.fillRect(w * 0.3 + i * w * 0.12, h * 0.52, 18, 20);
+            }
+            
+            // Main entrance arch
             ctx.fillStyle = '#2f2f2f';
-            ctx.fillRect(w * 0.45, h * 0.5, 60, h * 0.2);
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.48, 50, 0, Math.PI);
+            ctx.fill();
+            ctx.fillRect(w * 0.45, h * 0.48, 100, h * 0.22);
             
-            // Gate
-            ctx.strokeStyle = '#d4af37';
+            // Portcullis (gate)
+            ctx.fillStyle = '#d4af37';
+            ctx.fillRect(w * 0.47, h * 0.5, 6, h * 0.2);
+            ctx.fillRect(w * 0.53, h * 0.5, 6, h * 0.2);
+            ctx.fillRect(w * 0.59, h * 0.5, 6, h * 0.2);
+            ctx.fillRect(w * 0.65, h * 0.5, 6, h * 0.2);
+            
+            // Gate cross-bars
+            ctx.fillRect(w * 0.47, h * 0.55, 24, 4);
+            ctx.fillRect(w * 0.47, h * 0.6, 24, 4);
+            
+            // Flags on towers
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.moveTo(w * 0.15 + 35, h * 0.02);
+            ctx.lineTo(w * 0.15 + 55, h * 0.08);
+            ctx.lineTo(w * 0.15 + 35, h * 0.1);
+            ctx.closePath();
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.moveTo(w * 0.82 + 35, h * 0.02);
+            ctx.lineTo(w * 0.82 + 55, h * 0.08);
+            ctx.lineTo(w * 0.82 + 35, h * 0.1);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Flag poles
+            ctx.strokeStyle = '#8b4513';
             ctx.lineWidth = 3;
-            ctx.fillStyle = '#8b6914';
-            ctx.fillRect(w * 0.47, h * 0.52, 26, h * 0.16);
-            ctx.fillRect(w * 0.57, h * 0.52, 26, h * 0.16);
+            ctx.beginPath();
+            ctx.moveTo(w * 0.15 + 35, h * 0.02);
+            ctx.lineTo(w * 0.15 + 35, h * 0.22);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w * 0.82 + 35, h * 0.02);
+            ctx.lineTo(w * 0.82 + 35, h * 0.22);
+            ctx.stroke();
         }
 
         function drawHero(x, y) {
             const s = 1.5;
-            // Head
-            ctx.fillStyle = '#f5deb3';
+            
+            // Helmet with plume
+            ctx.fillStyle = '#c0c0c0';
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y, 18 * s, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y - 8 * s, 20 * s, 0, Math.PI * 2);
             ctx.fill();
             
-            // Eyes
-            ctx.fillStyle = '#000';
-            ctx.fillRect(x + 12 * s, y - 6 * s, 4 * s, 4 * s);
-            ctx.fillRect(x + 22 * s, y - 6 * s, 4 * s, 4 * s);
+            // Helmet face guard
+            ctx.fillRect(x + 10 * s, y - 3 * s, 20 * s, 10 * s);
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(x + 12 * s, y - 2 * s, 4 * s, 6 * s);
+            ctx.fillRect(x + 24 * s, y - 2 * s, 4 * s, 6 * s);
             
-            // Smile
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
+            // Plume
+            ctx.fillStyle = '#ff0000';
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + 20 * s + i * 3, y - 28 * s);
+                ctx.lineTo(x + 18 * s + i * 3, y - 15 * s);
+                ctx.lineTo(x + 22 * s + i * 3, y - 15 * s);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Neck guard
+            ctx.fillStyle = '#a9a9a9';
+            ctx.fillRect(x + 12 * s, y + 8 * s, 16 * s, 6 * s);
+            
+            // Shoulder armor
+            ctx.fillStyle = '#808080';
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y + 2 * s, 6 * s, 0, Math.PI);
-            ctx.stroke();
+            ctx.arc(x + 2 * s, y + 15 * s, 8 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 38 * s, y + 15 * s, 8 * s, 0, Math.PI * 2);
+            ctx.fill();
             
-            // Body - blue armor
+            // Main body armor - blue
             ctx.fillStyle = '#4169e1';
-            ctx.fillRect(x + 8 * s, y + 15 * s, 24 * s, 30 * s);
+            ctx.fillRect(x + 8 * s, y + 15 * s, 24 * s, 32 * s);
             
-            // Gold trim
+            // Armor chest plate detail
+            ctx.fillStyle = '#6a8fd8';
+            ctx.beginPath();
+            ctx.moveTo(x + 8 * s, y + 18 * s);
+            ctx.lineTo(x + 32 * s, y + 18 * s);
+            ctx.lineTo(x + 30 * s, y + 28 * s);
+            ctx.lineTo(x + 10 * s, y + 28 * s);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Gold trim - edges
             ctx.fillStyle = '#ffd700';
-            ctx.fillRect(x + 8 * s, y + 15 * s, 24 * s, 3 * s);
-            ctx.fillRect(x + 8 * s, y + 40 * s, 24 * s, 3 * s);
+            ctx.fillRect(x + 7 * s, y + 15 * s, 1 * s, 32 * s);
+            ctx.fillRect(x + 32 * s, y + 15 * s, 1 * s, 32 * s);
+            ctx.fillRect(x + 8 * s, y + 14 * s, 24 * s, 2 * s);
             
-            // Arms
-            ctx.fillStyle = '#ff6347';
-            ctx.fillRect(x + 2 * s, y + 20 * s, 6 * s, 20 * s);
-            ctx.fillRect(x + 32 * s, y + 20 * s, 6 * s, 20 * s);
+            // Shield on left arm
+            ctx.fillStyle = '#2f4f7f';
+            ctx.beginPath();
+            ctx.arc(x + 1 * s, y + 25 * s, 8 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(x + 1 * s, y + 25 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
             
-            // Legs
-            ctx.fillStyle = '#3d3d3d';
-            ctx.fillRect(x + 10 * s, y + 45 * s, 7 * s, 20 * s);
-            ctx.fillRect(x + 23 * s, y + 45 * s, 7 * s, 20 * s);
+            // Sword in right hand
+            ctx.strokeStyle = '#c0c0c0';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(x + 35 * s, y + 20 * s);
+            ctx.lineTo(x + 38 * s, y + 5 * s);
+            ctx.stroke();
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.moveTo(x + 38 * s, y + 3 * s);
+            ctx.lineTo(x + 41 * s, y);
+            ctx.lineTo(x + 35 * s, y + 2 * s);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Arms exposed
+            ctx.fillStyle = '#f5deb3';
+            ctx.fillRect(x + 2 * s, y + 22 * s, 5 * s, 18 * s);
+            ctx.fillRect(x + 33 * s, y + 22 * s, 5 * s, 18 * s);
+            
+            // Arm bands
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(x + 2 * s, y + 22 * s, 5 * s, 2 * s);
+            ctx.fillRect(x + 33 * s, y + 22 * s, 5 * s, 2 * s);
+            
+            // Legs - metal greaves
+            ctx.fillStyle = '#a9a9a9';
+            ctx.fillRect(x + 10 * s, y + 47 * s, 8 * s, 20 * s);
+            ctx.fillRect(x + 22 * s, y + 47 * s, 8 * s, 20 * s);
             
             // Boots
             ctx.fillStyle = '#8b4513';
-            ctx.fillRect(x + 9 * s, y + 65 * s, 9 * s, 5 * s);
-            ctx.fillRect(x + 22 * s, y + 65 * s, 9 * s, 5 * s);
+            ctx.beginPath();
+            ctx.arc(x + 14 * s, y + 67 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 26 * s, y + 67 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
         }
 
         function drawWizard(x, y) {
             const s = 1.5;
-            // Pointed hat
-            ctx.fillStyle = '#4b0082';
+            
+            // Pointed hat with stars
+            ctx.fillStyle = '#2c1861';
             ctx.beginPath();
-            ctx.moveTo(x + 20 * s, y - 15 * s);
-            ctx.lineTo(x + 10 * s, y + 5 * s);
-            ctx.lineTo(x + 30 * s, y + 5 * s);
+            ctx.moveTo(x + 20 * s, y - 20 * s);
+            ctx.lineTo(x + 8 * s, y + 5 * s);
+            ctx.lineTo(x + 32 * s, y + 5 * s);
             ctx.closePath();
             ctx.fill();
             
+            // Hat stars
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x + 18 * s, y - 10 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 22 * s, y - 5 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
             // Hat brim
-            ctx.fillStyle = '#6a0dad';
+            ctx.fillStyle = '#4b0082';
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 5 * s, 14 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#2c1861';
             ctx.beginPath();
             ctx.arc(x + 20 * s, y + 5 * s, 12 * s, 0, Math.PI * 2);
             ctx.fill();
             
-            // Head
+            // Head with mystical glow
             ctx.fillStyle = '#fdbcb4';
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y + 15 * s, 16 * s, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y + 18 * s, 17 * s, 0, Math.PI * 2);
             ctx.fill();
             
-            // Eyes - mystical
-            ctx.fillStyle = '#fff';
-            ctx.fillRect(x + 12 * s, y + 10 * s, 5 * s, 5 * s);
-            ctx.fillRect(x + 23 * s, y + 10 * s, 5 * s, 5 * s);
-            ctx.fillStyle = '#000';
-            ctx.fillRect(x + 13 * s, y + 11 * s, 2 * s, 2 * s);
-            ctx.fillRect(x + 24 * s, y + 11 * s, 2 * s, 2 * s);
+            // Mystical eyes - glowing
+            ctx.fillStyle = '#00ffff';
+            ctx.beginPath();
+            ctx.arc(x + 13 * s, y + 12 * s, 4 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 27 * s, y + 12 * s, 4 * s, 0, Math.PI * 2);
+            ctx.fill();
             
-            // Beard
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x + 13 * s, y + 12 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 27 * s, y + 12 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Long beard
             ctx.fillStyle = '#d4a5a5';
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y + 30 * s, 8 * s, 0, Math.PI);
+            ctx.moveTo(x + 15 * s, y + 32 * s);
+            ctx.lineTo(x + 13 * s, y + 42 * s);
+            ctx.lineTo(x + 27 * s, y + 42 * s);
+            ctx.lineTo(x + 25 * s, y + 32 * s);
+            ctx.closePath();
             ctx.fill();
             
-            // Robe
-            ctx.fillStyle = '#6a0dad';
-            ctx.fillRect(x + 6 * s, y + 30 * s, 28 * s, 35 * s);
-            
-            // Stars on robe
-            ctx.fillStyle = '#ffff00';
+            // Beard curls
+            ctx.strokeStyle = '#d4a5a5';
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x + 12 * s, y + 40 * s, 3 * s, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.arc(x + 13 * s, y + 40 * s, 3 * s, 0, Math.PI);
+            ctx.stroke();
             ctx.beginPath();
-            ctx.arc(x + 28 * s, y + 45 * s, 3 * s, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Staff
-            ctx.strokeStyle = '#8b4513';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(x + 35 * s, y + 25 * s);
-            ctx.lineTo(x + 40 * s, y + 60 * s);
+            ctx.arc(x + 27 * s, y + 40 * s, 3 * s, 0, Math.PI);
             ctx.stroke();
             
-            // Staff orb
+            // Robe - gradient
+            ctx.fillStyle = '#4b0082';
+            ctx.fillRect(x + 4 * s, y + 32 * s, 32 * s, 38 * s);
+            ctx.fillStyle = '#6a0dad';
+            ctx.fillRect(x + 4 * s, y + 32 * s, 32 * s, 5 * s);
+            
+            // Moon and stars on robe
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x + 10 * s, y + 45 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 22 * s, y + 50 * s, 2.5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 30 * s, y + 48 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Mystical crescent moon
+            ctx.fillStyle = '#ffff99';
+            ctx.beginPath();
+            ctx.arc(x + 12 * s, y + 25 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#4b0082';
+            ctx.beginPath();
+            ctx.arc(x + 14 * s, y + 25 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Staff with magical aura
+            ctx.strokeStyle = '#8b4513';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(x + 36 * s, y + 28 * s);
+            ctx.lineTo(x + 42 * s, y + 65 * s);
+            ctx.stroke();
+            
+            // Magical aura around staff
+            ctx.strokeStyle = 'rgba(255, 105, 180, 0.5)';
+            ctx.lineWidth = 10;
+            ctx.beginPath();
+            ctx.moveTo(x + 36 * s, y + 28 * s);
+            ctx.lineTo(x + 42 * s, y + 65 * s);
+            ctx.stroke();
+            
+            // Staff orb - glowing
             ctx.fillStyle = '#ff69b4';
             ctx.beginPath();
-            ctx.arc(x + 40 * s, y + 20 * s, 6 * s, 0, Math.PI * 2);
+            ctx.arc(x + 42 * s, y + 22 * s, 8 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Orb glow
+            ctx.fillStyle = 'rgba(255, 105, 180, 0.3)';
+            ctx.beginPath();
+            ctx.arc(x + 42 * s, y + 22 * s, 15 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Orb inner light
+            ctx.fillStyle = '#ffb6d9';
+            ctx.beginPath();
+            ctx.arc(x + 42 * s, y + 22 * s, 4 * s, 0, Math.PI * 2);
             ctx.fill();
         }
 
         function drawGoblin(x, y) {
             const s = 1.5;
-            // Head - green
+            
+            // Head - warty green
             ctx.fillStyle = '#6b8e23';
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y, 16 * s, 0, Math.PI * 2);
+            ctx.arc(x + 20 * s, y, 17 * s, 0, Math.PI * 2);
             ctx.fill();
             
-            // Ears
+            // Warts on head
             ctx.fillStyle = '#556b2f';
             ctx.beginPath();
-            ctx.arc(x + 8 * s, y - 12 * s, 7 * s, 0, Math.PI * 2);
+            ctx.arc(x + 10 * s, y - 8 * s, 3 * s, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(x + 32 * s, y - 12 * s, 7 * s, 0, Math.PI * 2);
+            ctx.arc(x + 30 * s, y - 10 * s, 4 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 22 * s, y + 15 * s, 2 * s, 0, Math.PI * 2);
             ctx.fill();
             
-            // Crazy eyes
-            ctx.fillStyle = '#ffff00';
-            ctx.fillRect(x + 12 * s, y - 4 * s, 6 * s, 6 * s);
-            ctx.fillRect(x + 22 * s, y - 4 * s, 6 * s, 6 * s);
-            ctx.fillStyle = '#000';
-            ctx.fillRect(x + 13 * s, y - 3 * s, 3 * s, 3 * s);
-            ctx.fillRect(x + 24 * s, y - 2 * s, 3 * s, 3 * s);
+            // Pointy ears
+            ctx.fillStyle = '#556b2f';
+            ctx.beginPath();
+            ctx.moveTo(x + 6 * s, y - 12 * s);
+            ctx.lineTo(x + 3 * s, y - 22 * s);
+            ctx.lineTo(x + 9 * s, y - 16 * s);
+            ctx.closePath();
+            ctx.fill();
             
-            // Wicked grin
+            ctx.beginPath();
+            ctx.moveTo(x + 34 * s, y - 14 * s);
+            ctx.lineTo(x + 37 * s, y - 24 * s);
+            ctx.lineTo(x + 40 * s, y - 16 * s);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Crazy eyes - uneven
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x + 12 * s, y - 3 * s, 5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 28 * s, y - 1 * s, 5.5 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pupils - different sizes
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(x + 12 * s, y - 3 * s, 3 * s, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + 28 * s, y - 1 * s, 2 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Bulbous nose
+            ctx.fillStyle = '#7a9d28';
+            ctx.beginPath();
+            ctx.arc(x + 20 * s, y + 5 * s, 6 * s, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Nostrils
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x + 18 * s, y + 4 * s, 2 * s, 2 * s);
+            ctx.fillRect(x + 22 * s, y + 4 * s, 2 * s, 2 * s);
+            
+            // Wicked grin with more teeth
             ctx.strokeStyle = '#000';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.arc(x + 20 * s, y + 4 * s, 8 * s, 0, Math.PI);
+            ctx.arc(x + 20 * s, y + 8 * s, 9 * s, 0, Math.PI);
             ctx.stroke();
             
-            // Teeth
+            // Sharp teeth
             ctx.fillStyle = '#fff';
-            for (let i = 0; i < 5; i++) {
-                ctx.fillRect(x + (14 + i * 2.4) * s, y + 4 * s, 1.5 * s, 2 * s);
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + (12 + i * 2) * s, y + 8 * s);
+                ctx.lineTo(x + (12.8 + i * 2) * s, y + 12 * s);
+                ctx.lineTo(x + (13.6 + i * 2) * s, y + 8 * s);
+                ctx.closePath();
+                ctx.fill();
             }
             
-            // Body
+            // Body - spiky
             ctx.fillStyle = '#7cb342';
-            ctx.fillRect(x + 6 * s, y + 15 * s, 28 * s, 35 * s);
+            ctx.fillRect(x + 5 * s, y + 16 * s, 30 * s, 36 * s);
             
-            // Claws on chest
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(x + 15 * s, y + 25 * s);
-            ctx.lineTo(x + 10 * s, y + 32 * s);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x + 25 * s, y + 25 * s);
-            ctx.lineTo(x + 30 * s, y + 32 * s);
-            ctx.stroke();
+            // Chest armor/chitin
+            ctx.fillStyle = '#5a8c1f';
+            ctx.fillRect(x + 5 * s, y + 16 * s, 30 * s, 8 * s);
             
-            // Legs
+            // Spikes on back
+            ctx.fillStyle = '#3d5a1f';
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + 3 * s, y + (20 + i * 8) * s);
+                ctx.lineTo(x - 5 * s, y + (22 + i * 8) * s);
+                ctx.lineTo(x + 3 * s, y + (24 + i * 8) * s);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Claws on arms
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + 3 * s, y + (22 + i * 5) * s);
+                ctx.lineTo(x - 8 * s, y + (24 + i * 5) * s);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(x + 37 * s, y + (22 + i * 5) * s);
+                ctx.lineTo(x + 48 * s, y + (24 + i * 5) * s);
+                ctx.stroke();
+            }
+            
+            // Legs - muscular
             ctx.fillStyle = '#558b2f';
-            ctx.fillRect(x + 9 * s, y + 50 * s, 7 * s, 18 * s);
-            ctx.fillRect(x + 24 * s, y + 50 * s, 7 * s, 18 * s);
+            ctx.beginPath();
+            ctx.moveTo(x + 9 * s, y + 52 * s);
+            ctx.lineTo(x + 6 * s, y + 70 * s);
+            ctx.lineTo(x + 12 * s, y + 70 * s);
+            ctx.closePath();
+            ctx.fill();
             
-            // Feet
+            ctx.beginPath();
+            ctx.moveTo(x + 31 * s, y + 52 * s);
+            ctx.lineTo(x + 28 * s, y + 70 * s);
+            ctx.lineTo(x + 34 * s, y + 70 * s);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Clawed feet
             ctx.fillStyle = '#3d5a1f';
             ctx.beginPath();
-            ctx.arc(x + 12.5 * s, y + 68 * s, 5 * s, 0, Math.PI * 2);
+            ctx.arc(x + 9 * s, y + 70 * s, 6 * s, 0, Math.PI * 2);
             ctx.fill();
             ctx.beginPath();
-            ctx.arc(x + 27.5 * s, y + 68 * s, 5 * s, 0, Math.PI * 2);
+            ctx.arc(x + 31 * s, y + 70 * s, 6 * s, 0, Math.PI * 2);
             ctx.fill();
+            
+            // Toe claws
+            ctx.strokeStyle = '#1a1a1a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(x + 6 * s, y + 73 * s);
+            ctx.lineTo(x + 2 * s, y + 78 * s);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x + 12 * s, y + 73 * s);
+            ctx.lineTo(x + 16 * s, y + 78 * s);
+            ctx.stroke();
         }
 
         function drawScene(sceneKey) {
